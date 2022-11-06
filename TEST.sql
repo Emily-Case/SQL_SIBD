@@ -102,3 +102,20 @@ CREATE TABLE Cliente (
     CONSTRAINT ck_Cliente_Idade
         CHECK (Ano_Registo - Ano_Nascimento >= 18)      
 );
+--
+CREATE TABLE Fatura (
+    NIF NUMBER(9),
+    NIPC NUMBER(9),
+    Ano NUMBER(4),
+    Número_Sequencial NUMBER(9),
+    Data DATE,
+
+    CONSTRAINT pk_Fatura
+        PRIMARY KEY (NIF,NIPC,Ano,Número_Sequencial),
+
+    CONSTRAINT fk_Fatura_Existe
+        FOREIGN KEY (NIPC,Ano) REFERENCES Existe (NIPC,Ano) ON DELETE CASCADE,
+
+    CONSTRAINT fk_Fatura_Cliente
+        FOREIGN KEY (NIF) REFERENCES Cliente (NIF) ON DELETE NO ACTION  
+);
