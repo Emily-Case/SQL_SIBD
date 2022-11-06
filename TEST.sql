@@ -80,8 +80,8 @@ CREATE TABLE Cliente (
     NIF NUMBER(9),
     Nome VARCHAR(40),
     Gênero VARCHAR(10),
-    Ano_Registo NUMBER(4),
-    Ano_Nascimento NUMBER(4),
+    Ano_Registo NUMBER(4) CONSTRAINT nn_Cliente_Ano_Registo NOT NULL,
+    Ano_Nascimento NUMBER(4) CONSTRAINT nn_Cliente_Ano_Nascimento NOT NULL,
 
     CONSTRAINT pk_Cliente
         PRIMARY KEY (NIF),
