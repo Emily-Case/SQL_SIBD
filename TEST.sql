@@ -188,4 +188,28 @@ INSERT INTO Produto (EAN13, Nome, Peso, Largura, Altura, Profundidade, Categoria
     VALUES (3333333333333, 'Camisa', 5, 40, 60, 3, 'roupa');
 --
 INSERT INTO Produto (EAN13, Nome, Peso, Largura, Altura, Profundidade, Categoria)
-    VALUES (4444444444444, 'Gato', 8, 20, 30, 15, 'animais'); 
+    VALUES (4444444444444, 'Gato', 8, 20, 30, 15, 'animais');
+--
+INSERT INTO PessoaColetiva (NIPC, Telefone, Nome)
+    VALUES (111111111, 911222333, 'LIDL');    
+--
+INSERT INTO PessoaColetiva (NIPC, Telefone, Nome)
+    VALUES (222222222, 922333444, 'Continente');
+--
+INSERT INTO PessoaColetiva (NIPC, Telefone, Nome)
+    VALUES (333333333, 933444555, 'Fornecedor&co');
+--
+INSERT INTO PessoaColetiva (NIPC, Telefone, Nome)
+    VALUES (444444444, 944555666, 'For.Inc');   
+--
+INSERT INTO Fornecedor (NIPC)
+    VALUES (333333333);
+--
+INSERT INTO Fornecedor (NIPC)
+    VALUES (444444444);  
+--
+INSERT INTO Loja (NIPC)
+    VALUES (111111111);
+--
+INSERT INTO Loja (NIPC)
+    VALUES (222222222); 
