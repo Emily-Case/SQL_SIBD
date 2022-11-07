@@ -3,12 +3,12 @@
 
 CREATE TABLE Produto (
     EAN13 NUMBER(13),
-    Nome VARCHAR(40),
-    Peso NUMBER(3,1),
-    Largura NUMBER(10),
-    Altura NUMBER(10),
-    Profundidade NUMBER(10),
-    Categoria VARCHAR(10),
+    Nome VARCHAR(40) NOT NULL,
+    Peso NUMBER(3,1) NOT NULL,
+    Largura NUMBER(10) NOT NULL,
+    Altura NUMBER(10) NOT NULL,
+    Profundidade NUMBER(10) NOT NULL,
+    Categoria VARCHAR(10) NOT NULL,
     --
     CONSTRAINT pk_Produto
         PRIMARY KEY(EAN13),
@@ -87,8 +87,8 @@ CREATE TABLE Existe(
 --
 CREATE TABLE Cliente (
     NIF NUMBER(9),
-    Nome VARCHAR(40),
-    Gênero VARCHAR(10),
+    Nome VARCHAR(40) NOT NULL,
+    Gênero VARCHAR(10) NOT NULL,
     Ano_Registo NUMBER(4) CONSTRAINT nn_Cliente_Ano_Registo NOT NULL,
     Ano_Nascimento NUMBER(4) CONSTRAINT nn_Cliente_Ano_Nascimento NOT NULL,
     --
@@ -117,7 +117,7 @@ CREATE TABLE Fatura (
     NIPC NUMBER(9),
     Ano NUMBER(4),
     Número_Sequencial NUMBER(9),
-    Data DATE,
+    Data DATE NOT NULL,
     --
     CONSTRAINT pk_Fatura
         PRIMARY KEY (NIF,NIPC,Ano,Número_Sequencial),
@@ -152,9 +152,9 @@ CREATE TABLE Oferece (
     Ano NUMBER(4),
     NIPC_Loja NUMBER(9),
     EAN13 NUMBER(13),
-    Preço NUMBER(6,2),
-    Dia_de_Semana_de_Fornecimento VARCHAR(20),
-    Unidades_por_Semana NUMBER(4),
+    Preço NUMBER(6,2) NOT NULL,
+    Dia_de_Semana_de_Fornecimento VARCHAR(20) NOT NULL,
+    Unidades_por_Semana NUMBER(4) NOT NULL,
     --
     CONSTRAINT pk_Oferece
         PRIMARY KEY (NIPC_Fornecedor,Ano,NIPC_Loja,EAN13),
@@ -177,3 +177,15 @@ CREATE TABLE Oferece (
         OR Dia_de_Semana_de_Fornecimento = 'sábado' 
         OR Dia_de_Semana_de_Fornecimento = 'domingo')
 );
+--
+INSERT INTO Produto (EAN13, Nome, Peso, Largura, Altura, Profundidade, Categoria)
+    VALUES (1111111111111, 'Banana', 2, 1, 1, 1, 'comida');
+--
+INSERT INTO Produto (EAN13, Nome, Peso, Largura, Altura, Profundidade, Categoria)
+    VALUES (2222222222222, 'Batom', 5, 5, 4, 2, 'beleza');
+--
+INSERT INTO Produto (EAN13, Nome, Peso, Largura, Altura, Profundidade, Categoria)
+    VALUES (3333333333333, 'Camisa', 5, 40, 60, 3, 'roupa');
+--
+INSERT INTO Produto (EAN13, Nome, Peso, Largura, Altura, Profundidade, Categoria)
+    VALUES (4444444444444, 'Gato', 8, 20, 30, 15, 'animais'); 
