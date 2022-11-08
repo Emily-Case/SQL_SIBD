@@ -1,6 +1,16 @@
 --RIAs não implementadas: 2,3,5,6,7,19,20--
 --RIAs que (maybe) podemos implementar: 10--
-
+DROP TABLE Oferece;
+DROP TABLE Fornece;
+DROP TABLE Fatura;
+DROP TABLE Cliente;
+DROP TABLE Existe;
+DROP TABLE Ano;
+DROP TABLE Loja;
+DROP TABLE Fornecedor;
+DROP TABLE PessoaColetiva;
+DROP TABLE Produto;
+--
 CREATE TABLE Produto (
     EAN13 NUMBER(13),
     Nome VARCHAR(40) NOT NULL,
@@ -79,7 +89,7 @@ CREATE TABLE Existe(
         PRIMARY KEY (NIPC,Ano),
     --
     CONSTRAINT fk_Existe1
-        FOREIGN KEY (NIPC) REFERENCES Loja (NIPC),
+        FOREIGN KEY (NIPC) REFERENCES Loja (NIPC) ON DELETE CASCADE,
     --
     CONSTRAINT fk_Existe2
         FOREIGN KEY (Ano) REFERENCES Ano (Ano)  
@@ -113,20 +123,20 @@ CREATE TABLE Cliente (
 );
 --
 CREATE TABLE Fatura (
-    NIF NUMBER(9),
     NIPC NUMBER(9),
     Ano NUMBER(4),
     Número_Sequencial NUMBER(9),
+    NIF NUMBER(9) NOT NULL,
     Data DATE NOT NULL,
     --
     CONSTRAINT pk_Fatura
-        PRIMARY KEY (NIF,NIPC,Ano,Número_Sequencial),
+        PRIMARY KEY (NIPC,Ano,Número_Sequencial),
     --
     CONSTRAINT fk_Fatura_Existe
         FOREIGN KEY (NIPC,Ano) REFERENCES Existe (NIPC,Ano) ON DELETE CASCADE,
     --
     CONSTRAINT fk_Fatura_Cliente
-        FOREIGN KEY (NIF) REFERENCES Cliente (NIF) ON DELETE NO ACTION,
+        FOREIGN KEY (NIF) REFERENCES Cliente (NIF) ON DELETE NO ACTION,--ON CLIENT DELETE ERROR POPS, MUST CHECK--
     --
     CONSTRAINT ck_Fatura_Número_Sequencial--RIA18
         CHECK (Número_Sequencial >= 1)
@@ -166,7 +176,7 @@ CREATE TABLE Oferece (
         FOREIGN KEY (EAN13) REFERENCES Produto (EAN13),
     --
     CONSTRAINT ck_Oferece_Positivo--RIA14
-        CHECK (Preço > 0 AND Unidades_por_Semana > 0),
+        CHECK (Preço > 0.0 AND Unidades_por_Semana > 0),
     --
     CONSTRAINT ck_Oferece_Dia_de_Semana--RIA15
         CHECK (Dia_de_Semana_de_Fornecimento = 'segunda-feira' 
@@ -212,4 +222,61 @@ INSERT INTO Loja (NIPC)
     VALUES (111111111);
 --
 INSERT INTO Loja (NIPC)
-    VALUES (222222222); 
+    VALUES (222222222);  
+--
+INSERT INTO Ano (Ano)
+    VALUES (2022);  
+--
+INSERT INTO Ano (Ano)
+    VALUES (1987); 
+--
+INSERT INTO Ano (Ano)
+    VALUES (2016); 
+--
+INSERT INTO Ano (Ano)
+    VALUES (2021);
+--
+INSERT INTO Ano (Ano)
+    VALUES (2010);  
+--
+INSERT INTO Ano (Ano)
+    VALUES (2000);
+--
+INSERT INTO Ano (Ano)
+    VALUES (1980); 
+--
+INSERT INTO Existe (NIPC, Ano)
+    VALUES (111111111, 2021);
+--
+INSERT INTO Existe (NIPC, Ano)
+    VALUES (111111111, 2022);
+--
+INSERT INTO Existe (NIPC, Ano)
+    VALUES (222222222, 2016);
+--
+INSERT INTO Existe (NIPC, Ano)
+    VALUES (222222222, 2022);   
+--
+INSERT INTO Cliente (NIF, Nome, Gênero, Ano_Registo, Ano_Nascimento)
+    VALUES (123456789, 'Maria', 'feminino', 2022, 2000);
+--
+INSERT INTO Cliente (NIF, Nome, Gênero, Ano_Registo, Ano_Nascimento)
+    VALUES (234567891, 'André', 'masculino', 2010, 1980);
+--
+INSERT INTO Fatura (NIPC, Ano, Número_Sequencial, NIF, Data)
+    VALUES (111111111, 2022, 1, 123456789, '2022-01-27');
+--
+INSERT INTO Fatura (NIPC, Ano, Número_Sequencial, NIF, Data)
+    VALUES (222222222, 2022, 1, 234567891, '2022-10-05');  
+--
+INSERT INTO Fornece (NIPC_Fornecedor, Ano, NIPC_Loja)
+    VALUES (333333333, 2022, 111111111);
+--
+INSERT INTO Fornece (NIPC_Fornecedor, Ano, NIPC_Loja)
+    VALUES (444444444, 2022, 222222222);  
+--
+INSERT INTO Oferece (NIPC_Fornecedor, Ano, NIPC_Loja, EAN13, Preço, Dia_de_Semana_de_Fornecimento, Unidades_por_Semana)
+    VALUES (333333333, 2022, 111111111, 4444444444444, 2.99, 'segunda-feira', 100);
+--
+INSERT INTO Oferece (NIPC_Fornecedor, Ano, NIPC_Loja, EAN13, Preço, Dia_de_Semana_de_Fornecimento, Unidades_por_Semana)
+    VALUES (444444444, 2022, 222222222, 1111111111111, 0.99, 'domingo', 500);  
