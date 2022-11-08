@@ -10,6 +10,8 @@ DROP TABLE Fornecedor;
 DROP TABLE PessoaColetiva;
 DROP TABLE Produto;
 --
+ALTER SESSION SET NLS_DATE_FORMAT = 'yyyy-mm-dd'; --alters date format because of session might have a different one--
+--
 CREATE TABLE Produto (
     EAN13 NUMBER(13),
     Nome VARCHAR(40) NOT NULL,
@@ -126,7 +128,7 @@ CREATE TABLE Fatura (
     Ano NUMBER(4),
     Número_Sequencial NUMBER(9),
     NIF NUMBER(9) NOT NULL,
-    Data DATE NOT NULL,
+    Data_1 DATE NOT NULL,
     --
     CONSTRAINT pk_Fatura
         PRIMARY KEY (NIPC,Ano,Número_Sequencial),
@@ -161,7 +163,7 @@ CREATE TABLE Oferece (
     Ano NUMBER(4),
     NIPC_Loja NUMBER(9),
     EAN13 NUMBER(13),
-    Preço NUMBER(6,2) NOT NULL,
+    Preco NUMBER(6,2) NOT NULL,
     Dia_de_Semana_de_Fornecimento VARCHAR(20) NOT NULL,
     Unidades_por_Semana NUMBER(4) NOT NULL,
     --
@@ -175,7 +177,7 @@ CREATE TABLE Oferece (
         FOREIGN KEY (EAN13) REFERENCES Produto (EAN13),
     --
     CONSTRAINT ck_Oferece_Positivo--RIA14
-        CHECK (Preço > 0.0 AND Unidades_por_Semana > 0),
+        CHECK (Preco > 0 AND Unidades_por_Semana > 0),
     --
     CONSTRAINT ck_Oferece_Dia_de_Semana--RIA15
         CHECK (Dia_de_Semana_de_Fornecimento = 'segunda-feira' 
@@ -206,7 +208,7 @@ INSERT INTO PessoaColetiva (NIPC, Telefone, Nome)
     VALUES (222222222, 922333444, 'Continente');
 --
 INSERT INTO PessoaColetiva (NIPC, Telefone, Nome)
-    VALUES (333333333, 933444555, 'Fornecedor&co');
+    VALUES (333333333, 933444555, 'Fornecedor.co');
 --
 INSERT INTO PessoaColetiva (NIPC, Telefone, Nome)
     VALUES (444444444, 944555666, 'For.Inc');   
@@ -262,10 +264,10 @@ INSERT INTO Cliente (NIF, Nome, Gênero, Ano_Registo, Ano_Nascimento)
 INSERT INTO Cliente (NIF, Nome, Gênero, Ano_Registo, Ano_Nascimento)
     VALUES (234567891, 'André', 'masculino', 2010, 1980);
 --
-INSERT INTO Fatura (NIPC, Ano, Número_Sequencial, NIF, Data)
+INSERT INTO Fatura (NIPC, Ano, Número_Sequencial, NIF, Data_1)
     VALUES (111111111, 2022, 1, 123456789, '2022-01-27');
 --
-INSERT INTO Fatura (NIPC, Ano, Número_Sequencial, NIF, Data)
+INSERT INTO Fatura (NIPC, Ano, Número_Sequencial, NIF, Data_1)
     VALUES (222222222, 2022, 1, 234567891, '2022-10-05');  
 --
 INSERT INTO Fornece (NIPC_Fornecedor, Ano, NIPC_Loja)
@@ -274,8 +276,8 @@ INSERT INTO Fornece (NIPC_Fornecedor, Ano, NIPC_Loja)
 INSERT INTO Fornece (NIPC_Fornecedor, Ano, NIPC_Loja)
     VALUES (444444444, 2022, 222222222);  
 --
-INSERT INTO Oferece (NIPC_Fornecedor, Ano, NIPC_Loja, EAN13, Preço, Dia_de_Semana_de_Fornecimento, Unidades_por_Semana)
-    VALUES (333333333, 2022, 111111111, 4444444444444, 2.99, 'segunda-feira', 100);
+INSERT INTO Oferece (NIPC_Fornecedor, Ano, NIPC_Loja, EAN13, Preco, Dia_de_Semana_de_Fornecimento, Unidades_por_Semana)
+    VALUES (333333333, 2022, 111111111, 4444444444444, 2.99, 'terça-feira', 100);
 --
-INSERT INTO Oferece (NIPC_Fornecedor, Ano, NIPC_Loja, EAN13, Preço, Dia_de_Semana_de_Fornecimento, Unidades_por_Semana)
-    VALUES (444444444, 2022, 222222222, 1111111111111, 0.99, 'domingo', 500); 
+INSERT INTO Oferece (NIPC_Fornecedor, Ano, NIPC_Loja, EAN13, Preco, Dia_de_Semana_de_Fornecimento, Unidades_por_Semana)
+    VALUES (444444444, 2022, 222222222, 1111111111111, 0.99, 'domingo', 500);
