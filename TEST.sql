@@ -10,7 +10,8 @@ DROP TABLE Fornecedor;
 DROP TABLE PessoaColetiva;
 DROP TABLE Produto;
 --
-ALTER SESSION SET NLS_DATE_FORMAT = 'yyyy-mm-dd'; --alters date format because of session might have a different one--
+ALTER SESSION SET NLS_DATE_FORMAT = 'yyyy-mm-dd'; 
+--alters date format because of session might have a different one--
 --
 CREATE TABLE Produto (
     EAN13 NUMBER(13),
