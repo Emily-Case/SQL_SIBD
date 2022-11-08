@@ -89,7 +89,7 @@ CREATE TABLE Existe(
         PRIMARY KEY (NIPC,Ano),
     --
     CONSTRAINT fk_Existe1
-        FOREIGN KEY (NIPC) REFERENCES Loja (NIPC) ON DELETE CASCADE,
+        FOREIGN KEY (NIPC) REFERENCES Loja (NIPC),
     --
     CONSTRAINT fk_Existe2
         FOREIGN KEY (Ano) REFERENCES Ano (Ano)  
@@ -136,7 +136,7 @@ CREATE TABLE Fatura (
         FOREIGN KEY (NIPC,Ano) REFERENCES Existe (NIPC,Ano) ON DELETE CASCADE,
     --
     CONSTRAINT fk_Fatura_Cliente
-        FOREIGN KEY (NIF) REFERENCES Cliente (NIF) ON DELETE NO ACTION,--ON CLIENT DELETE ERROR POPS, MUST CHECK--
+        FOREIGN KEY (NIF) REFERENCES Cliente (NIF),
     --
     CONSTRAINT ck_Fatura_Número_Sequencial--RIA18
         CHECK (Número_Sequencial >= 1)
@@ -154,7 +154,7 @@ CREATE TABLE Fornece (
         FOREIGN KEY (NIPC_Fornecedor) REFERENCES Fornecedor (NIPC),
     --
     CONSTRAINT fk_Fornece_Existe
-        FOREIGN KEY (NIPC_Loja,Ano) REFERENCES Existe (NIPC,Ano)
+        FOREIGN KEY (NIPC_Loja,Ano) REFERENCES Existe (NIPC,Ano) ON DELETE CASCADE
 );
 --
 CREATE TABLE Oferece (
@@ -170,7 +170,7 @@ CREATE TABLE Oferece (
         PRIMARY KEY (NIPC_Fornecedor,Ano,NIPC_Loja,EAN13),
     --
     CONSTRAINT fk_Oferece_Fornece
-        FOREIGN KEY (NIPC_Fornecedor,Ano,NIPC_Loja) REFERENCES Fornece (NIPC_Fornecedor,Ano,NIPC_Loja),
+        FOREIGN KEY (NIPC_Fornecedor,Ano,NIPC_Loja) REFERENCES Fornece (NIPC_Fornecedor,Ano,NIPC_Loja) ON DELETE CASCADE,
     --
     CONSTRAINT fk_Oferece_Produto
         FOREIGN KEY (EAN13) REFERENCES Produto (EAN13),
@@ -279,4 +279,4 @@ INSERT INTO Oferece (NIPC_Fornecedor, Ano, NIPC_Loja, EAN13, Preço, Dia_de_Sema
     VALUES (333333333, 2022, 111111111, 4444444444444, 2.99, 'segunda-feira', 100);
 --
 INSERT INTO Oferece (NIPC_Fornecedor, Ano, NIPC_Loja, EAN13, Preço, Dia_de_Semana_de_Fornecimento, Unidades_por_Semana)
-    VALUES (444444444, 2022, 222222222, 1111111111111, 0.99, 'domingo', 500);  
+    VALUES (444444444, 2022, 222222222, 1111111111111, 0.99, 'domingo', 500); 
