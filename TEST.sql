@@ -1,5 +1,4 @@
---RIAs não implementadas: 2,3,5,6,7,19,20--
---RIAs que (maybe) podemos implementar: 10--
+--RIAs não implementadas: 2,3,5,6,7,10,19,20--
 DROP TABLE Oferece;
 DROP TABLE Fornece;
 DROP TABLE Fatura;
