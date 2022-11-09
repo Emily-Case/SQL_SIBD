@@ -33,7 +33,7 @@ CREATE TABLE Produto (
         CHECK (Peso > 0 AND Largura > 0 AND Altura > 0 AND Profundidade > 0),
     --
     CONSTRAINT ck_Produto_Categoria--RIA13
-        CHECK (Categoria = 'comida' OR Categoria = 'roupa' OR Categoria = 'beleza' OR Categoria = 'animais')
+        CHECK (Categoria IN ('comida','roupa','beleza','animais'))
 );
 --
 CREATE TABLE PessoaColetiva (
@@ -181,13 +181,8 @@ CREATE TABLE Oferece (
         CHECK (Preco > 0 AND Unidades_por_Semana > 0),
     --
     CONSTRAINT ck_Oferece_Dia_de_Semana--RIA15
-        CHECK (Dia_de_Semana_de_Fornecimento = 'segunda-feira' 
-        OR Dia_de_Semana_de_Fornecimento = 'terça-feira' 
-        OR Dia_de_Semana_de_Fornecimento = 'quarta-feira' 
-        OR Dia_de_Semana_de_Fornecimento = 'quinta-feira' 
-        OR Dia_de_Semana_de_Fornecimento = 'sexta-feira' 
-        OR Dia_de_Semana_de_Fornecimento = 'sábado' 
-        OR Dia_de_Semana_de_Fornecimento = 'domingo')
+        CHECK (Dia_de_Semana_de_Fornecimento IN 
+        ('segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado','domingo'))
 );
 --
 INSERT INTO Produto (EAN13, Nome, Peso, Largura, Altura, Profundidade, Categoria)
