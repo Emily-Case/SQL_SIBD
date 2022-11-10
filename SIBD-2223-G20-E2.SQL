@@ -1,3 +1,9 @@
+-- SIBD 2022/2023   Etapa 2   Grupo 20
+-- Inês Luz      fc57552 (TP13)
+-- José Sá       fc58200 (TP11)
+-- Marta Lorenço fc58249 (TP15)
+-- Yichen Cao    fc58165 (TP11)
+------------------------------------------------
 --RIAs não implementadas: 2,3,5,6,7,10,19,20--
 DROP TABLE Oferece;
 DROP TABLE Fornece;
@@ -9,10 +15,10 @@ DROP TABLE Loja;
 DROP TABLE Fornecedor;
 DROP TABLE PessoaColetiva;
 DROP TABLE Produto;
---
+------------------------------------------------
 ALTER SESSION SET NLS_DATE_FORMAT = 'yyyy-mm-dd'; 
 --alters date format because session might have a different one--
---
+------------------------------------------------
 CREATE TABLE Produto (
     EAN13 NUMBER(13),
     Nome VARCHAR(40) NOT NULL,
@@ -35,7 +41,7 @@ CREATE TABLE Produto (
     CONSTRAINT ck_Produto_Categoria--RIA13
         CHECK (Categoria IN ('comida','roupa','beleza','animais'))
 );
---
+------------------------------------------------
 CREATE TABLE PessoaColetiva (
     NIPC NUMBER(9),
     Telefone NUMBER(9) CONSTRAINT nn_PessoaColetiva_Telefone NOT NULL,
@@ -52,7 +58,7 @@ CREATE TABLE PessoaColetiva (
         CHECK (Telefone > 0),
         CHECK (LENGTH(Telefone) = 9)    
 );
---
+------------------------------------------------
 CREATE TABLE Fornecedor (
     NIPC NUMBER(9),
     --
@@ -62,7 +68,7 @@ CREATE TABLE Fornecedor (
     CONSTRAINT fk_Fornecedor
         FOREIGN KEY (NIPC) REFERENCES PessoaColetiva (NIPC) ON DELETE CASCADE   
 );
---
+------------------------------------------------
 CREATE TABLE Loja (
     NIPC NUMBER(9),
     --
@@ -72,7 +78,7 @@ CREATE TABLE Loja (
     CONSTRAINT fk_Loja
         FOREIGN KEY (NIPC) REFERENCES PessoaColetiva (NIPC) ON DELETE CASCADE   
 );
---
+------------------------------------------------
 CREATE TABLE Ano (
     Ano NUMBER(4),
     --
@@ -82,7 +88,7 @@ CREATE TABLE Ano (
     CONSTRAINT ck_Ano_Ano
         CHECK (Ano >= 1970)--RIA4
 );
---
+------------------------------------------------
 CREATE TABLE Existe(
     NIPC NUMBER(9),
     Ano NUMBER(4),
@@ -96,7 +102,7 @@ CREATE TABLE Existe(
     CONSTRAINT fk_Existe2
         FOREIGN KEY (Ano) REFERENCES Ano (Ano)  
 );
---
+------------------------------------------------
 CREATE TABLE Cliente (
     NIF NUMBER(9),
     Nome VARCHAR(40) NOT NULL,
@@ -123,7 +129,7 @@ CREATE TABLE Cliente (
     CONSTRAINT ck_Cliente_Idade
         CHECK (Ano_Registo - Ano_Nascimento >= 18)--RIA1
 );
---
+------------------------------------------------
 CREATE TABLE Fatura (
     NIPC NUMBER(9),
     Ano NUMBER(4),
@@ -143,7 +149,7 @@ CREATE TABLE Fatura (
     CONSTRAINT ck_Fatura_Número_Sequencial--RIA18
         CHECK (Número_Sequencial >= 1)
 );
---
+------------------------------------------------
 CREATE TABLE Fornece (
     NIPC_Fornecedor NUMBER(9),
     Ano NUMBER(4),
@@ -158,7 +164,7 @@ CREATE TABLE Fornece (
     CONSTRAINT fk_Fornece_Existe
         FOREIGN KEY (NIPC_Loja,Ano) REFERENCES Existe (NIPC,Ano) ON DELETE CASCADE
 );
---
+------------------------------------------------
 CREATE TABLE Oferece (
     NIPC_Fornecedor NUMBER(9),
     Ano NUMBER(4),
@@ -184,7 +190,7 @@ CREATE TABLE Oferece (
         CHECK (Dia_de_Semana_de_Fornecimento IN 
         ('segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado','domingo'))
 );
---
+------------------------------------------------
 INSERT INTO Produto (EAN13, Nome, Peso, Largura, Altura, Profundidade, Categoria)
     VALUES (1111111111111, 'Banana', 2, 1, 1, 1, 'comida');
 --
