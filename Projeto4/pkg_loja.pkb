@@ -5,7 +5,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
         nome_in IN cliente.nome%TYPE, 
         genero_in IN cliente.genero%TYPE, 
         nascimento_in IN cliente.nascimento%TYPE, 
-        localidade_in IN cliente.localidade%TYPE);  
+        localidade_in IN cliente.localidade%TYPE)
 
     IS
     BEGIN
@@ -18,7 +18,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
         nome_in IN produto.nome%TYPE, 
         categoria_in IN produto.categoria%TYPE, 
         preco_in IN produto.preco%TYPE, 
-        stock_in IN produto.stock%TYPE);
+        stock_in IN produto.stock%TYPE)
 
     IS
     BEGIN
