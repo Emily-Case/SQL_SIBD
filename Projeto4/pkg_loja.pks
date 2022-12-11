@@ -15,4 +15,4 @@ CREATE OR REPLACE PACKAGE PKG_LOJA IS
         stock_in IN produto.stock%TYPE);
 
 END PKG_LOJA;
-/ 
+/
