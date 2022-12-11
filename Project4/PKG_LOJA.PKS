@@ -13,3 +13,6 @@ CREATE OR REPLACE PACKAGE PKG_LOJA IS
         categoria_in IN produto.categoria%TYPE, 
         preco_in IN produto.preco%TYPE, 
         stock_in IN produto.stock%TYPE);
+
+END PKG_LOJA;
+/        
