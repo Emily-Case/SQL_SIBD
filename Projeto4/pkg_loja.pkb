@@ -51,17 +51,59 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
                 VALUES(seq_fatura_ordem.NEXTVAL, SYSDATE(), cliente_in);
             INSERT INTO linhafatura (fatura, produto, unidades)
                 VALUES(seq_fatura_ordem.CURRVAL, produto_in, unidades_in);
+            --UPDATE produto SET stock = (stock_atual - unidades_in) WHERE (ean13 = ean13_in);
             RETURN seq_fatura_ordem.CURRVAL;
 
         ELSE
             INSERT INTO linhafatura (fatura, produto, unidades)
                 VALUES(fatura_in, produto_in, unidades_in);
+            --UPDATE produto SET stock = (stock_atual - unidades_in) WHERE (ean13 = ean13_in);
             RETURN fatura_in;
 
         END IF;
         CLOSE cursor_produto;
     
     END regista_compra;
+
+    FUNCTION remove_compra(
+        fatura_in IN fatura.numero%TYPE,
+        produto_in IN produto.ean13%TYPE := NULL)
+        RETURN NUMBER
+
+    IS
+        CURSOR cursor_linhafatura IS SELECT produto FROM linhafatura WHERE fatura = fatura_in;
+        TYPE tabela_local_linhafatura IS TABLE OF cursor_linhafatura%ROWTYPE;
+
+        produtos tabela_local_linhafatura;
+
+    BEGIN
+
+        OPEN cursor_linhafatura;
+        FETCH cursor_linhafatura BULK COLLECT INTO produtos;
+        CLOSE cursor_linhafatura;
+
+        IF (produtos.COUNT = 0) THEN
+            RAISE_APPLICATION_ERROR(-20002, 'Fatura a remover/remover produtos de não existe.');
+
+        ELSIF (produto_in IS NULL) THEN
+            --FOR posicao_atual IN produtos.FIRST .. produtos.LAST LOOP
+                --DELETE FROM linhafatura WHERE (fatura = fatura_in) AND (produto = produtos(posicao_atual).ean13);
+            --END LOOP;
+            DELETE FROM fatura WHERE (numero = fatura_in);
+            RETURN 0;
+
+        ELSIF (produtos.COUNT = 1) THEN
+            DELETE FROM linhafatura WHERE (fatura = fatura_in) AND (produto = produto_in);
+            DELETE FROM fatura WHERE (numero = fatura_in);
+            RETURN 0;
+
+        ELSE
+            DELETE FROM linhafatura WHERE (fatura = fatura_in) AND (produto = produto_in);
+            RETURN (produtos.COUNT - 1);
+
+        END IF;
+
+    END remove_compra;
 
 END PKG_LOJA;
 /
