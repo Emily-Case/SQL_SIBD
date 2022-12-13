@@ -14,5 +14,12 @@ CREATE OR REPLACE PACKAGE PKG_LOJA IS
         preco_in IN produto.preco%TYPE, 
         stock_in IN produto.stock%TYPE);
 
+    FUNCTION regista_compra(
+        cliente_in IN cliente.nif%TYPE,
+        produto_in IN produto.ean13%TYPE, 
+        unidades_in IN NUMBER, 
+        fatura_in IN fatura.numero%TYPE := NULL)
+        RETURN NUMBER;
+
 END PKG_LOJA;
 /
