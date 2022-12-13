@@ -21,5 +21,10 @@ CREATE OR REPLACE PACKAGE PKG_LOJA IS
         fatura_in IN fatura.numero%TYPE := NULL)
         RETURN NUMBER;
 
+    FUNCTION remove_compra(
+        fatura_in IN fatura.numero%TYPE,
+        produto_in IN produto.ean13%TYPE := NULL)
+        RETURN NUMBER;
+
 END PKG_LOJA;
 /
