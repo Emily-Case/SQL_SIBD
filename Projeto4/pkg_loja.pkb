@@ -92,11 +92,11 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
         CLOSE cursor_produto;
 
         IF (produtos.COUNT = 0) THEN
-            RAISE_APPLICATION_ERROR(-20002, 'Fatura a remover/remover produtos de não existe.');
+            RAISE_APPLICATION_ERROR(-20002, 'Fatura a remover produtos de não existe.');
 
         ELSIF (produto_in IS NULL) THEN
-            --FOR posicao_atual IN produtos.FIRST .. produtos.LAST LOOP
-                --DELETE FROM linhafatura WHERE (fatura = fatura_in) AND (produto = produtos(posicao_atual).ean13);
+            --FOR x IN produtos.FIRST .. produtos.LAST LOOP
+                --DELETE FROM linhafatura WHERE (fatura = fatura_in) AND (produto = produtos(x));
             --END LOOP;
             DELETE FROM fatura WHERE (numero = fatura_in);
             RETURN 0;
