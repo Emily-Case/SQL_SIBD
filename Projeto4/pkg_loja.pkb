@@ -98,6 +98,7 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
         stock_atual NUMBER;
         stock_adicionar NUMBER;
         valor_final NUMBER;
+        stock_temp NUMBER;
 
     BEGIN
 
@@ -117,7 +118,8 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
         ELSIF (produto_in IS NULL) THEN
             FOR x IN produtos.FIRST .. produtos.LAST LOOP
                 DELETE FROM linhafatura WHERE (fatura = fatura_in) AND (produto = produtos(x).produto);
-                UPDATE produto SET stock = (1000 + produtos(x).unidades) WHERE (ean13 = produtos(x).produto);
+                SELECT stock INTO stock_temp FROM produto WHERE (ean13 = produtos(x).produto);
+                UPDATE produto SET stock = (stock_temp + produtos(x).unidades) WHERE (ean13 = produtos(x).produto);
             END LOOP;
             DELETE FROM fatura WHERE (numero = fatura_in);
             valor_final := 0;
