@@ -1,0 +1,81 @@
+-- ----------------------------------------------------------------------------
+    -- remove a product and all purhcases of that product by customers
+    -- must invoke remove_compra
+    PROCEDURE remove_produto(
+        ean13_in IN produto.ean13%TYPE)
+
+    IS 
+        CURSOR cursor_fatura IS SELECT numero FROM fatura F, linhafatura L WHERE (F.numero = L.fatura) AND (L.produto = ean13_in);
+        CURSOR cursor_produto IS SELECT * FROM produto WHERE (ean13 = ean13_in);
+        TYPE tabela_local_fatura IS TABLE OF cursor_fatura%ROWTYPE;
+        TYPE tabela_local_produto IS TABLE OF cursor_produto%ROWTYPE;
+        faturas tabela_local_fatura;
+        produtos tabela_local_produto;
+        valor_temp NUMBER;
+
+    BEGIN
+
+        OPEN cursor_fatura;
+        OPEN cursor_produto;
+        FETCH cursor_fatura BULK COLLECT INTO faturas;
+        FETCH cursor_produto BULK COLLECT INTO produtos;
+        CLOSE cursor_fatura;
+        CLOSE cursor_produto;
+
+        IF (produtos.COUNT = 0) THEN
+            RAISE_APPLICATION_ERROR(-20003, 'Produto a remover não existe.');
+
+        ELSIF (faturas.COUNT = 0) THEN
+            DELETE FROM produto WHERE (ean13 = ean13_in);
+
+        ELSE
+            FOR x IN faturas.FIRST .. faturas.LAST LOOP
+                valor_temp := remove_compra(faturas(x).numero,ean13_in);
+            END LOOP;
+            DELETE FROM produto WHERE (ean13 = ean13_in);
+
+        END IF;
+
+    END remove_produto;
+
+-- ----------------------------------------------------------------------------
+    -- remove client and all purchases they've made
+    -- must invoke remove_compra
+    PROCEDURE remove_cliente(
+        nif_in IN cliente.nif%TYPE)
+    
+    IS 
+        CURSOR cursor_fatura IS SELECT numero FROM fatura WHERE (cliente = nif_in);
+        CURSOR cursor_cliente IS SELECT * FROM cliente WHERE (nif = nif_in);
+        TYPE tabela_local_fatura IS TABLE OF cursor_fatura%ROWTYPE;
+        TYPE tabela_local_cliente IS TABLE OF cursor_cliente%ROWTYPE;
+        faturas tabela_local_fatura;
+        clientes tabela_local_cliente;
+        valor_temp NUMBER;
+
+    BEGIN 
+
+        OPEN cursor_fatura;
+        OPEN cursor_cliente;
+        FETCH cursor_fatura BULK COLLECT INTO faturas;
+        FETCH cursor_cliente BULK COLLECT INTO clientes;
+        CLOSE cursor_fatura;
+        CLOSE cursor_cliente;
+
+        IF (clientes.COUNT = 0) THEN
+            RAISE_APPLICATION_ERROR(-20004, 'Cliente a remover não existe.');
+
+        ELSIF (faturas.COUNT = 0) THEN
+            DELETE FROM cliente WHERE (nif = nif_in);
+        
+        ELSE
+            FOR x IN faturas.FIRST .. faturas.LAST LOOP
+                valor_temp := remove_compra(faturas(x).numero);
+            END LOOP;
+            DELETE FROM cliente WHERE (nif = nif_in);
+
+        END IF;
+
+    END remove_cliente;
+
+-- ----------------------------------------------------------------------------
