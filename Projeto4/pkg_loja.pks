@@ -1,3 +1,8 @@
+-- SIBD 2022/2023   Etapa 4   Grupo 20
+-- Inês Luz      fc57552 (TP13)
+-- José Sá       fc58200 (TP11)
+-- Marta Lorenço fc58249 (TP15)
+-- Yichen Cao    fc58165 (TP11)
 CREATE OR REPLACE PACKAGE PKG_LOJA IS
 -- ----------------------------------------------------------------------------
     PROCEDURE regista_cliente(
