@@ -39,6 +39,8 @@ VARIABLE delCompra2 NUMBER;
 -- ----------------------------------------------------------------------------
 VARIABLE delCompra3 NUMBER;
 -- ----------------------------------------------------------------------------
+VARIABLE lista REFCURSOR;
+-- ----------------------------------------------------------------------------
 BEGIN
 -- Inserir os produtos que a loja disponibliza
 -- Categoria: Comida
@@ -112,11 +114,13 @@ pkg_loja.remove_cliente(111111111);
 pkg_loja.remove_cliente(555555555);
 -- ----------------------------------------------------------------------------
 -- SPACE FOR 7
-
+:lista := pkg_loja.lista_produtos('Animais'); -- change this to other categories for testing
 -- ----------------------------------------------------------------------------
 END;
 /
 -- ----------------------------------------------------------------------------
+-- prints the cursor as table?
+PRINT lista;
 -- A loja verifica as tabelas ao fim do dia
 SELECT * FROM cliente;
 SELECT * FROM produto;

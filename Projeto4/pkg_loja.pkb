@@ -231,6 +231,20 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
     -- RETURN 
     -- END
 
+    FUNCTION lista_produtos(
+        categoria_in IN produto.categoria%TYPE)
+        RETURN SYS_REFCURSOR
+    IS
+        c_lines SYS_REFCURSOR; -- Cursor genérico.
+    BEGIN
+
+        OPEN c_lines FOR
+            SELECT * FROM linhafatura F, produto P 
+                     WHERE (F.produto = P.ean13) 
+                     AND (P.categoria = categoria_in);
+        RETURN c_lines; -- Cursor devolvido ainda está aberto. END lista_empregados_com_inicial;
+    END lista_produtos;
+
 END PKG_LOJA;
 /
 -- ----------------------------------------------------------------------------

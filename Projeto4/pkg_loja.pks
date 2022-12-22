@@ -44,9 +44,9 @@ CREATE OR REPLACE PACKAGE PKG_LOJA IS
     PROCEDURE remove_cliente(
         nif_in IN cliente.nif%TYPE);
 -- ----------------------------------------------------------------------------
-    --FUNCTION lista_produtos(
-        --categoria_in IN produto.categoria%TYPE)
-        --RETURN SYS_REFCURSOR;
+    FUNCTION lista_produtos(
+        categoria_in IN produto.categoria%TYPE)
+        RETURN SYS_REFCURSOR;
 -- ----------------------------------------------------------------------------
 END PKG_LOJA;
 /
