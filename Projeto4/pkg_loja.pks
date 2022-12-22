@@ -5,6 +5,13 @@
 -- Yichen Cao    fc58165 (TP11)
 CREATE OR REPLACE PACKAGE PKG_LOJA IS
 -- ----------------------------------------------------------------------------
+-- As operações lançam exceções para sinalizar casos de erro.
+-- Mensagens das Exceções:
+--  -20001 - Não existe stock suficiente para efetuar a compra.
+--  -20002 - Fatura a remover produtos de não existe.
+--  -20003 - Produto a remover não existe.
+--  -20004 - Cliente a remover não existe.
+-- ----------------------------------------------------------------------------
     PROCEDURE regista_cliente(
         nif_in IN cliente.nif%TYPE, 
         nome_in IN cliente.nome%TYPE, 
