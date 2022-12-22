@@ -1,3 +1,8 @@
+-- SIBD 2022/2023   Etapa 4   Grupo 20
+-- Inês Luz      fc57552 (TP13)
+-- José Sá       fc58200 (TP11)
+-- Marta Lorenço fc58249 (TP15)
+-- Yichen Cao    fc58165 (TP11)
 @@tabelas.sql
 CREATE SEQUENCE seq_fatura_ordem
     START WITH 0
@@ -20,11 +25,19 @@ VARIABLE numFatura1g NUMBER;
 VARIABLE numFatura2 NUMBER;
 VARIABLE numFatura2a NUMBER;
 -- ----------------------------------------------------------------------------
+VARIABLE numFatura3 NUMBER;
+VARIABLE numFatura3a NUMBER;
+VARIABLE numFatura3b NUMBER;
+VARIABLE numFatura3c NUMBER;
+VARIABLE numFatura3d NUMBER;
+-- ----------------------------------------------------------------------------
 VARIABLE delCompra1 NUMBER;
 VARIABLE delCompra1a NUMBER;
 VARIABLE delCompra1b NUMBER;
 -- ----------------------------------------------------------------------------
 VARIABLE delCompra2 NUMBER;
+-- ----------------------------------------------------------------------------
+VARIABLE delCompra3 NUMBER;
 -- ----------------------------------------------------------------------------
 BEGIN
 -- Inserir os produtos que a loja disponibliza
@@ -74,22 +87,39 @@ pkg_loja.regista_cliente(555555555,'Diogo','M',1992,'Beja');
 :numFatura2 := pkg_loja.regista_compra(222222222,2222222222222,20);
 :numFatura2a := pkg_loja.regista_compra(222222222,3333333333333,100,:numFatura2);
 -- ----------------------------------------------------------------------------
+-- O cliente 444444444 realiza uma compra na loja
+:numFatura3 := pkg_loja.regista_compra(444444444,4777777777777,1);
+:numFatura3a := pkg_loja.regista_compra(444444444,5888888888888,15,:numFatura3);
+:numFatura3b := pkg_loja.regista_compra(444444444,5666666666666,2,:numFatura3);
+:numFatura3c := pkg_loja.regista_compra(444444444,3444444444444,3,:numFatura3);
+:numFatura3d := pkg_loja.regista_compra(444444444,4666666666666,1,:numFatura3);
+-- ----------------------------------------------------------------------------
 -- O cliente 111111111 realiza uma devolução dos produtos 3333333333333, 1333333333333 e 1222222222222
 :delCompra1 := pkg_loja.remove_compra(:numFatura1,3333333333333);
 :delCompra1a := pkg_loja.remove_compra(:numFatura1,1333333333333);
 :delCompra1b := pkg_loja.remove_compra(:numFatura1,1222222222222);
 -- O cliente 222222222 remove todas as compras que efetuou
 :delCompra2 := pkg_loja.remove_compra(:numFatura2);
+-- O cliente 444444444 realiza uma devolução do produto 3444444444444
+:delCompra3 := pkg_loja.remove_compra(:numFatura3,3444444444444);
+-- ----------------------------------------------------------------------------
+-- A loja deixa de oferecer os produtos 4444444444444 e 5555555555555
+pkg_loja.remove_produto(4444444444444);
+pkg_loja.remove_produto(5555555555555);
+-- ----------------------------------------------------------------------------
+-- Os clientes 111111111 e 555555555 decidiu deixar de frequentar a loja e os seus dados devem ser apagados
+pkg_loja.remove_cliente(111111111);
+pkg_loja.remove_cliente(555555555);
+-- ----------------------------------------------------------------------------
+-- SPACE FOR 7
+
 -- ----------------------------------------------------------------------------
 END;
 /
 -- ----------------------------------------------------------------------------
+-- A loja verifica as tabelas ao fim do dia
 SELECT * FROM cliente;
 SELECT * FROM produto;
 SELECT * FROM fatura;
 SELECT * FROM linhafatura;
-PRINT numFatura1;
-PRINT numFatura2;
-PRINT delCompra1b;
-PRINT delCompra2;
--- ---------------------------------------------------------------------------- 
+-- ----------------------------------------------------------------------------
