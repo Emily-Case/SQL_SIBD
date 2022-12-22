@@ -138,27 +138,79 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
     -- remove a product and all purhcases of that product by customers
     -- must invoke remove_compra
 
-    -- remove_produto(ean13_in)
-    -- IS
-    -- BEGIN
-    -- RETURN 
-    -- END
+    PROCEDURE remove_produto (
+        ean13_in IN produto.ean13%TYPE);
+    IS
+        CURSOR cursor_produto IS SELECT * FROM produto P WHERE (P.ean13 = ean13_in);
+        TYPE tabela_local_produto IS TABLE OF cursor_produto%ROWTYPE;
+        CURSOR cursor_fatura IS SELECT numero FROM fatura F, linhafatura LF WHERE (F.numero = LF.fatura) AND (LF.produto = ean13_in);
+        TYPE tabela_local_fatura IS TABLE OF cursor_fatura%ROWTYPE;
+        
+        produto tabela_local_produto;
+        faturas tabela_local_fatura;
+
+    BEGIN
+        OPEN cursor_produto;
+        OPEN cursor_fatura;
+        FETCH cursor_produto BULK COLLECT INTO produto;
+        FETCH cursor_fatura BULK COLLECT INTO faturas;
+        CLOSE cursor_produto;
+        CLOSE cursor_fatura;
+
+        IF (produto%NOTFOUND) THEN
+            RAISE_APPLICATION_ERROR(-20003, 'Produto a remover não existe.');
+        ELSIF (produto%FOUND AND faturas.COUNT = 0) THEN
+            DELETE FROM produto WHERE (ean13 = ean13_in);
+        ELSE
+            FOR fatura_atual IN faturas.FIRST .. faturas.LAST LOOP
+                remove_compra(faturas(fatura_atual).numero, ean13_in);
+            END LOOP;
+            DELETE FROM produto WHERE (ean13 = ean13_in);
+        END IF;
+    END remove_produto;
 
 -- ----------------------------------------------------------------------------
     -- remove client and all purchases they've made
     -- must invoke remove_compra
 
-    -- remove_cliente(nif_in)
-    -- IS
-    -- BEGIN
-    -- RETURN 
-    -- END
+    PROCEDURE remove_cliente (
+        nif_in IN cliente.nif%TYPE);
+    IS
+        CURSOR cursor_cliente IS SELECT * FROM cliente C WHERE (C.nif = nif_in);
+        TYPE tabela_local_cliente IS TABLE OF cursor_cliente%ROWTYPE;
+        CURSOR cursor_fatura IS SELECT numero FROM fatura F WHERE (F.numero = nif_in);
+        TYPE tabela_local_fatura IS TABLE OF cursor_fatura%ROWTYPE;
+
+        cliente tabela_local_cliente;
+        faturas tabela_local_fatura;
+
+    BEGIN
+        OPEN cursor_cliente;
+        OPEN cursor_fatura;
+        FETCH cursor_cliente BULK COLLECT INTO cliente;
+        FETCH cursor_fatura BULK COLLECT INTO faturas;
+        CLOSE cursor_cliente;
+        CLOSE cursor_fatura;
+
+    IF (cliente%NOTFOUND) THEN
+        RAISE_APPLICATION_ERROR (-20004, 'Cliente a remover não existe.');
+    ELSIF (cliente%FOUND AND faturas.COUNT = 1)
+        DELETE FROM cliente (nif = nif_in);
+    ELSE
+        FOR fatura_atual IN faturas.FIRST .. faturas.LAST LOOP
+            remove_compra(faturas(fatura_atual).numero);
+        END LOOP;
+        DELETE FROM cliente WHERE (nif = nif_in);
+
+    END remove_cliente;
 
 -- ----------------------------------------------------------------------------
     -- returns a cursor to the product list of an indicated category that is 
-    --    ordered dsec of how many of each item was bought
+    -- ordered desc of how many of each item was bought
     
-    -- lista_produtos(categoria_in) -> CURSOR
+    FUNCTION lista_produtos (
+        categoria_in IN produto.categoria%TYPE)
+        RETURN SYS_REFCURSOR; 
     -- IS
     -- BEGIN
     -- RETURN 
