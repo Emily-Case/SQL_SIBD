@@ -29,8 +29,9 @@ CREATE OR REPLACE PACKAGE PKG_LOJA IS
     PROCEDURE remove_produto(
         ean13_in IN produto.ean13%TYPE);
 -- ----------------------------------------------------------------------------
-    PROCEDURE remove_cliente(
-        nif_in IN cliente.nif%TYPE);
+    --FUNCTION lista_produtos(
+        --categoria_in IN produto.categoria%TYPE)
+        --RETURN SYS_REFCURSOR;
 -- ----------------------------------------------------------------------------
     FUNCTION lista_produtos(
         categoria_in IN produto.categoria%TYPE)
