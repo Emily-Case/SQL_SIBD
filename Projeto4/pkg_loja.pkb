@@ -222,14 +222,6 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
 -- ----------------------------------------------------------------------------
     -- returns a cursor to the product list of an indicated category that is 
     -- ordered desc of how many of each item was bought
-    
-    --FUNCTION lista_produtos (
-        --categoria_in IN produto.categoria%TYPE)
-        --RETURN SYS_REFCURSOR; 
-    -- IS
-    -- BEGIN
-    -- RETURN 
-    -- END
 
     FUNCTION lista_produtos(
         categoria_in IN produto.categoria%TYPE)
@@ -239,10 +231,12 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
     BEGIN
 
         OPEN c_lines FOR
-            SELECT * FROM linhafatura F, produto P 
-                     WHERE (F.produto = P.ean13) 
-                     AND (P.categoria = categoria_in);
-        RETURN c_lines; -- Cursor devolvido ainda está aberto. END lista_empregados_com_inicial;
+            SELECT P.ean13, P.nome, P.preco, SUM (COALESCE(F.unidades,0)) AS total_bought
+            FROM produto P LEFT OUTER JOIN linhafatura F ON P.ean13 = F.produto
+            WHERE (P.categoria = categoria_in)
+            GROUP BY P.ean13, P.nome, P.preco
+            ORDER BY total_bought DESC;
+        RETURN c_lines; -- Cursor is still open when passed
     END lista_produtos;
 
 END PKG_LOJA;
