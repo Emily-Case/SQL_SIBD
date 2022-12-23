@@ -1,3 +1,4 @@
+-- ----------------------------------------------------------------------------
 -- SIBD 2022/2023   Etapa 4   Grupo 20
 -- Inês Luz      fc57552 (TP13)
 -- José Sá       fc58200 (TP11)
@@ -14,13 +15,13 @@ CREATE SEQUENCE seq_fatura_ordem
 @@pkg_loja.pkb
 -- ----------------------------------------------------------------------------
 VARIABLE numFatura1 NUMBER;
--- VARIABLE numFatura1a NUMBER; -- i think these may be omitted? it runs fine without them
--- VARIABLE numFatura1b NUMBER;
--- VARIABLE numFatura1c NUMBER;
--- VARIABLE numFatura1d NUMBER;
--- VARIABLE numFatura1e NUMBER;
--- VARIABLE numFatura1f NUMBER;
--- VARIABLE numFatura1g NUMBER;
+VARIABLE numFatura1a NUMBER;
+VARIABLE numFatura1b NUMBER;
+VARIABLE numFatura1c NUMBER;
+VARIABLE numFatura1d NUMBER;
+VARIABLE numFatura1e NUMBER;
+VARIABLE numFatura1f NUMBER;
+VARIABLE numFatura1g NUMBER;
 -- ----------------------------------------------------------------------------
 VARIABLE numFatura2 NUMBER;
 VARIABLE numFatura2a NUMBER;
@@ -31,6 +32,14 @@ VARIABLE numFatura3b NUMBER;
 VARIABLE numFatura3c NUMBER;
 VARIABLE numFatura3d NUMBER;
 -- ----------------------------------------------------------------------------
+VARIABLE numFatura6 NUMBER;
+VARIABLE numFatura6a NUMBER;
+VARIABLE numFatura6b NUMBER;
+VARIABLE numFatura6c NUMBER;
+VARIABLE numFatura6d NUMBER;
+-- ----------------------------------------------------------------------------
+VARIABLE lista REFCURSOR;
+-- ----------------------------------------------------------------------------
 VARIABLE delCompra1 NUMBER;
 VARIABLE delCompra1a NUMBER;
 VARIABLE delCompra1b NUMBER;
@@ -38,13 +47,6 @@ VARIABLE delCompra1b NUMBER;
 VARIABLE delCompra2 NUMBER;
 -- ----------------------------------------------------------------------------
 VARIABLE delCompra3 NUMBER;
--- ----------------------------------------------------------------------------
-VARIABLE numFatura6 NUMBER;
--- VARIABLE numFatura6a NUMBER;
--- VARIABLE numFatura6b NUMBER;
--- VARIABLE numFatura6c NUMBER;
--- VARIABLE numFatura6d NUMBER;
-VARIABLE lista REFCURSOR;
 -- ----------------------------------------------------------------------------
 BEGIN
 -- Inserir os produtos que a loja disponibliza
@@ -68,8 +70,8 @@ pkg_loja.regista_produto(4666666666666,'Perfume','Beleza',20.00,750);
 pkg_loja.regista_produto(5777777777777,'Eyeliner','Beleza',1.50,3250);
 -- Categoria: Animais
 pkg_loja.regista_produto(1444444444444,'Comida de Gato','Animais',19.99,750);
-pkg_loja.regista_produto(2555555555555,'Coleira','Animais',4.99,600); -- none
-pkg_loja.regista_produto(3666666666666,'Pente','Animais',8.00,200); -- none
+pkg_loja.regista_produto(2555555555555,'Coleira','Animais',4.99,600);
+pkg_loja.regista_produto(3666666666666,'Pente','Animais',8.00,200);
 pkg_loja.regista_produto(4777777777777,'Aquario','Animais',199.99,50);
 pkg_loja.regista_produto(5888888888888,'Comida de Peixe','Animais',2.99,500);
 -- ----------------------------------------------------------------------------
@@ -79,7 +81,7 @@ pkg_loja.regista_cliente(222222222,'Beatriz','F',2003,'Lisboa');
 pkg_loja.regista_cliente(333333333,'Miguel','M',1987,'Porto');
 pkg_loja.regista_cliente(444444444,'Sara','F',2001,'Coimbra');
 pkg_loja.regista_cliente(555555555,'Diogo','M',1992,'Beja');
-pkg_loja.regista_cliente(666666666,'Argh','M',2000,'Beja');
+pkg_loja.regista_cliente(666666666,'Maria','F',2000,'Braga');
 -- ----------------------------------------------------------------------------
 -- O cliente 111111111 realiza uma compra na loja
 :numFatura1 := pkg_loja.regista_compra(111111111,1111111111111,3);
@@ -102,6 +104,13 @@ pkg_loja.regista_cliente(666666666,'Argh','M',2000,'Beja');
 :numFatura3c := pkg_loja.regista_compra(444444444,3444444444444,3,:numFatura3);
 :numFatura3d := pkg_loja.regista_compra(444444444,4666666666666,1,:numFatura3);
 -- ----------------------------------------------------------------------------
+-- O cliente 666666666 realiza uma compra na loja
+:numFatura6 := pkg_loja.regista_compra(666666666,1444444444444,1);
+:numFatura6a := pkg_loja.regista_compra(666666666,2555555555555,15,:numFatura6);
+:numFatura6b := pkg_loja.regista_compra(666666666,1444444444444,5);
+:numFatura6c := pkg_loja.regista_compra(666666666,3666666666666,3,:numFatura6b);
+:numFatura6d := pkg_loja.regista_compra(666666666,4777777777777,1,:numFatura6b);
+-- ----------------------------------------------------------------------------
 -- O cliente 111111111 realiza uma devolução dos produtos 3333333333333, 1333333333333 e 1222222222222
 :delCompra1 := pkg_loja.remove_compra(:numFatura1,3333333333333);
 :delCompra1a := pkg_loja.remove_compra(:numFatura1,1333333333333);
@@ -119,20 +128,15 @@ pkg_loja.remove_produto(5555555555555);
 pkg_loja.remove_cliente(111111111);
 pkg_loja.remove_cliente(555555555);
 -- ----------------------------------------------------------------------------
--- SPACE FOR 7
-:numFatura6 := pkg_loja.regista_compra(666666666,1444444444444,1); -- adjust these for testing
--- :numFatura6a := pkg_loja.regista_compra(666666666,2555555555555,15,:numFatura6);
--- :numFatura6b := pkg_loja.regista_compra(666666666,1444444444444,5); -- creates a new fatura
--- :numFatura6c := pkg_loja.regista_compra(666666666,3666666666666,3,:numFatura6);
--- :numFatura6d := pkg_loja.regista_compra(666666666,4777777777777,1,:numFatura6);
-
-:lista := pkg_loja.lista_produtos('Beleza'); -- change this to other categories for testing
+-- A loja usa a função para ter acesso à lista de produtos mais vendidos da categoria escolhida
+:lista := pkg_loja.lista_produtos('Animais');
 -- ----------------------------------------------------------------------------
 END;
 /
 -- ----------------------------------------------------------------------------
--- prints the cursor as table
+-- A loja verifica os produtos mais vendidos da categoria escolhida
 PRINT lista;
+-- ----------------------------------------------------------------------------
 -- A loja verifica as tabelas ao fim do dia
 SELECT * FROM cliente;
 SELECT * FROM produto;

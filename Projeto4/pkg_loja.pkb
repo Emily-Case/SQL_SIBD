@@ -1,3 +1,4 @@
+-- ----------------------------------------------------------------------------
 -- SIBD 2022/2023   Etapa 4   Grupo 20
 -- Inês Luz      fc57552 (TP13)
 -- José Sá       fc58200 (TP11)
@@ -222,12 +223,13 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
 -- ----------------------------------------------------------------------------
     -- returns a cursor to the product list of an indicated category that is 
     -- ordered desc of how many of each item was bought
-
     FUNCTION lista_produtos(
         categoria_in IN produto.categoria%TYPE)
         RETURN SYS_REFCURSOR
+
     IS
         c_lines SYS_REFCURSOR; -- Cursor genérico.
+
     BEGIN
 
         OPEN c_lines FOR
@@ -237,8 +239,9 @@ CREATE OR REPLACE PACKAGE BODY PKG_LOJA IS
             GROUP BY P.ean13, P.nome, P.preco
             ORDER BY total_bought DESC;
         RETURN c_lines; -- Cursor is still open when passed
-    END lista_produtos;
 
+    END lista_produtos;
+-- ----------------------------------------------------------------------------
 END PKG_LOJA;
 /
 -- ----------------------------------------------------------------------------
